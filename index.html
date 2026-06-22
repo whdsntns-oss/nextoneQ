@@ -164,12 +164,10 @@
     <!-- 메인 3D 히어로 섹션 (요청하신 동영상 최적화 크롭 렌더링) -->
     <section class="relative h-screen w-full flex items-center justify-center overflow-hidden perspective-container" id="hero">
         <div class="video-container">
-            <!-- 제공해주신 실제 현장 동영상 경로 반영 완료 (우회 자동재생 및 소스 탐색 지능화) -->
+            <!-- 제공해주신 실제 현장 동영상 경로 반영 완료 -->
             <video id="hero-video" autoplay loop muted playsinline class="cropped-video filter brightness-[0.55] contrast-[1.05]">
-                <source src="NEXT_ONE_Q_Hero.mp4.mp4" type="video/mp4">
-                <source src="영상에_나온_텍스트_부분을_없애줘_그리고_마지막_영상 (1).mp4" type="video/mp4">
-                <!-- 가상 미리보기 및 다운로드 전 환경에서도 즉각 동영상이 나오도록 신뢰성 높은 산업 세정 비디오를 온라인 백업 소스로 추가함 -->
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-pressure-washing-a-concrete-path-40018-large.mp4" type="video/mp4">
+                <!-- 이름을 단순하게 바꾼 동영상 파일을 불러옵니다 -->
+                <source src="hero.mp4" type="video/mp4">
             </video>
         </div>
         
@@ -646,24 +644,9 @@
                 }
             });
 
-            // 4. 비디오 파일 오토플레이 제한 우회 및 로드 디텍션 로직 완벽 최적화
+            // 4. 비디오 파일 오토플레이 제한 우회 로직 (클라우드 강제 전환 로직 완전 삭제)
             const heroVideo = document.getElementById('hero-video');
             if (heroVideo) {
-                // 접속 환경 감지 (CORS 및 파일 미존재로 인한 예외 방지)
-                const isLocal = window.location.protocol === 'file:' || 
-                                window.location.hostname === 'localhost' || 
-                                window.location.hostname === '127.0.0.1';
-
-                // Canvas 클라우드 미리보기 환경이라면 로컬 파일 탐색을 우회하고 곧바로 백업 CDN 스트림으로 재생
-                if (!isLocal) {
-                    const onlineSrc = "https://assets.mixkit.co/videos/preview/mixkit-pressure-washing-a-concrete-path-40018-large.mp4";
-                    heroVideo.src = onlineSrc;
-                    heroVideo.load();
-                }
-
-                const sources = heroVideo.getElementsByTagName('source');
-                let currentSourceIndex = 0;
-
                 const executePlay = () => {
                     let playPromise = heroVideo.play();
                     if (playPromise !== undefined) {
@@ -674,17 +657,6 @@
                         });
                     }
                 };
-
-                // 소스 로드 에러 이벤트를 바인딩하여 안전한 폴백 전환 구현
-                heroVideo.addEventListener('error', function(e) {
-                    currentSourceIndex++;
-                    if (currentSourceIndex < sources.length && isLocal) {
-                        console.log(`로컬 소스 전환: ${sources[currentSourceIndex].src}`);
-                        heroVideo.src = sources[currentSourceIndex].src;
-                        heroVideo.load();
-                        executePlay();
-                    }
-                }, true);
 
                 executePlay();
                 
