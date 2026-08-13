@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next One Q - 산업 시설 위생 관리 갤러리</title>
+    <title>Next One Q - 프리미엄 시공 갤러리</title>
     <style>
-        /* 기본 리셋 및 폰트 설정 */
         :root {
             --primary-color: #0A2540;
             --accent-color: #0066FF;
             --bg-color: #F8F9FA;
             --text-color: #333333;
+            --gray-color: #6c757d;
         }
         body {
             font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
@@ -20,193 +20,194 @@
             color: var(--text-color);
         }
         
-        /* 상단 헤더 영역 */
+        /* 상단 헤더 */
         header {
             background-color: var(--primary-color);
             color: white;
             padding: 3rem 1rem;
             text-align: center;
         }
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
-            font-weight: 800;
-        }
-        header p {
-            margin-top: 10px;
-            font-size: 1.1rem;
-            color: #A0B3C6;
-        }
+        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; font-weight: 800; }
+        header p { margin-top: 10px; font-size: 1.1rem; color: #A0B3C6; }
         .nav-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: white;
-            text-decoration: none;
-            border: 1px solid rgba(255,255,255,0.5);
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
+            display: inline-block; margin-top: 20px; color: white; text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.5); padding: 10px 20px; border-radius: 5px; transition: 0.3s;
         }
-        .nav-link:hover {
-            background-color: white;
-            color: var(--primary-color);
-        }
+        .nav-link:hover { background-color: white; color: var(--primary-color); }
 
-        /* 갤러리 레이아웃 (CSS Grid) */
-        .gallery-container {
-            max-width: 1200px;
-            margin: 4rem auto;
+        /* 필터 메뉴 버튼 */
+        .filter-menu {
+            text-align: center;
+            margin: 3rem auto 1rem;
             padding: 0 1rem;
+            max-width: 1000px;
         }
+        .filter-btn {
+            background: white; border: 1px solid #ddd; padding: 10px 20px;
+            margin: 5px; border-radius: 30px; cursor: pointer; font-size: 1rem;
+            font-weight: 600; color: var(--gray-color); transition: 0.3s;
+        }
+        .filter-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+        .filter-btn.active { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+
+        /* 갤러리 그리드 */
+        .gallery-container { max-width: 1200px; margin: 0 auto 4rem; padding: 1rem; }
         .gallery-grid {
             display: grid;
-            /* 핵심: 화면 크기에 맞춰 최소 300px씩 자동으로 배치 */
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 30px;
         }
 
-        /* 개별 갤러리 카드 디자인 */
+        /* 갤러리 카드 */
         .gallery-item {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); transition: transform 0.3s ease;
+            display: block; /* 필터링을 위한 기본 상태 */
         }
-        .gallery-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-        }
+        .gallery-item.hide { display: none; } /* 필터링 시 숨김 처리 */
+        .gallery-item:hover { transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
         
-        /* 썸네일 이미지 영역 (비율 유지) */
-        .img-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 75%; /* 4:3 비율 */
-            background-color: #E2E8F0;
-            overflow: hidden;
-        }
+        .img-wrapper { position: relative; width: 100%; padding-top: 75%; background-color: #E2E8F0; overflow: hidden; }
         .img-wrapper img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* 이미지가 찌그러지지 않고 영역을 채움 */
-            transition: transform 0.5s ease;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
         }
-        .gallery-item:hover .img-wrapper img {
-            transform: scale(1.05); /* 마우스 오버 시 살짝 확대 효과 */
-        }
+        .gallery-item:hover .img-wrapper img { transform: scale(1.05); }
 
-        /* 텍스트 설명 영역 */
-        .gallery-content {
-            padding: 1.5rem;
-        }
+        .gallery-content { padding: 1.5rem; }
         .badge {
-            display: inline-block;
-            padding: 5px 10px;
-            background-color: #E6F0FF;
-            color: var(--accent-color);
-            font-size: 0.75rem;
-            font-weight: 700;
-            border-radius: 4px;
-            margin-bottom: 12px;
+            display: inline-block; padding: 5px 10px; background-color: #E6F0FF;
+            color: var(--accent-color); font-size: 0.8rem; font-weight: 700; border-radius: 4px; margin-bottom: 12px;
         }
-        .gallery-title {
-            margin: 0 0 10px 0;
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            line-height: 1.4;
-        }
-        .gallery-desc {
-            margin: 0;
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.6;
-        }
+        .gallery-title { margin: 0 0 10px 0; font-size: 1.25rem; color: var(--primary-color); line-height: 1.4; }
+        .gallery-desc { margin: 0; font-size: 0.95rem; color: #555; line-height: 1.6; }
 
-        /* 모바일 반응형 처리 */
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.8rem;
-            }
-            .gallery-container {
-                margin: 2rem auto;
-            }
-            .gallery-grid {
-                /* 모바일에서는 여백을 약간 줄이고 카드 크기 조정 */
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                gap: 20px;
-            }
+            .filter-btn { padding: 8px 15px; font-size: 0.9rem; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 헤더 -->
     <header>
         <h1>NEXT ONE Q</h1>
-        <p>최첨단 데이터 기반 산업 시설 세척 갤러리</p>
-        <a href="index.html" class="nav-link">← 메인 홈페이지로 돌아가기</a>
+        <p>현장 최적화 위생 관리 솔루션 포트폴리오</p>
+        <a href="index.html" class="nav-link">← 메인으로 돌아가기</a>
     </header>
 
-    <!-- 갤러리 본문 -->
+    <!-- 6개 카테고리 필터 버튼 -->
+    <div class="filter-menu">
+        <button class="filter-btn active" data-filter="all">전체보기</button>
+        <button class="filter-btn" data-filter="regular">정기청소</button>
+        <button class="filter-btn" data-filter="ac">에어컨청소</button>
+        <button class="filter-btn" data-filter="factory">공장청소</button>
+        <button class="filter-btn" data-filter="office">사무실청소</button>
+        <button class="filter-btn" data-filter="special">특수청소</button>
+        <button class="filter-btn" data-filter="hood">후드청소</button>
+    </div>
+
     <main class="gallery-container">
-        <div class="gallery-grid">
+        <div class="gallery-grid" id="galleryGrid">
             
-            <!-- 카드 1 -->
-            <div class="gallery-item">
+            <!-- 1. 정기청소 -->
+            <div class="gallery-item" data-category="regular">
                 <div class="img-wrapper">
-                    <!-- 실제 사용 시 src 부분에 보유하신 현장 사진 경로(예: images/photo1.jpg)를 넣으세요 -->
-                    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=800&auto=format&fit=crop" alt="블로어 팬 세척">
+                    <img src="https://images.unsplash.com/photo-1613665813446-82a78c468a1d?q=80&w=800&auto=format&fit=crop" alt="정기청소">
                 </div>
                 <div class="gallery-content">
-                    <span class="badge">특수장비세척</span>
-                    <h3 class="gallery-title">설비 블로어 팬(Blower Fan) 정밀 세척</h3>
-                    <p class="gallery-desc">비가동부의 고착된 오염물질을 드라이아이스 펠릿 분사를 통해 수분 없이 100% 제거 완료.</p>
+                    <span class="badge">정기청소</span>
+                    <h3 class="gallery-title">대형 제조 시설 월간 정기 관리</h3>
+                    <p class="gallery-desc">체계적인 연간 마스터플랜을 통해 오염 유입을 사전에 차단하는 구독형 정기 위생 솔루션 시공 현장입니다.</p>
                 </div>
             </div>
 
-            <!-- 카드 2 -->
-            <div class="gallery-item">
+            <!-- 2. 에어컨청소 -->
+            <div class="gallery-item" data-category="ac">
                 <div class="img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop" alt="초고압 워터젯 세척">
+                    <img src="https://images.unsplash.com/photo-1590483861218-c2b64a2ec3ba?q=80&w=800&auto=format&fit=crop" alt="에어컨청소">
                 </div>
                 <div class="gallery-content">
-                    <span class="badge">UHP 워터젯</span>
-                    <h3 class="gallery-title">산업 현장 외벽 및 바닥 복원 시공</h3>
-                    <p class="gallery-desc">초고압 세척기(UHP)를 투입하여 누적된 화학 물질 및 찌든 때를 원래의 상태로 완벽히 복구.</p>
+                    <span class="badge">에어컨청소</span>
+                    <h3 class="gallery-title">시스템 냉난방기 완전 분해 세척</h3>
+                    <p class="gallery-desc">열교환기 내부의 곰팡이와 유해균을 고압 세척으로 완벽히 제거하여 공기 질과 냉난방 효율을 극대화합니다.</p>
                 </div>
             </div>
 
-            <!-- 카드 3 -->
-            <div class="gallery-item">
+            <!-- 3. 공장청소 -->
+            <div class="gallery-item" data-category="factory">
                 <div class="img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop" alt="클린룸 정기 관리">
+                    <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop" alt="공장청소">
                 </div>
                 <div class="gallery-content">
-                    <span class="badge">정기위생관리</span>
-                    <h3 class="gallery-title">반도체 생산 라인 클린룸 유지보수</h3>
-                    <p class="gallery-desc">수율 향상을 방해하는 미세 분진을 데이터 기반으로 추적하여 선제적으로 대응하는 월간 관리 솔루션.</p>
+                    <span class="badge">공장청소</span>
+                    <h3 class="gallery-title">산업 설비 UHP 고압 워터젯 세척</h3>
+                    <p class="gallery-desc">공장 바닥과 대형 장비에 고착된 찌든 화학 물질을 특수 고압 장비를 투입하여 훼손 없이 제거했습니다.</p>
                 </div>
             </div>
 
-            <!-- 카드 4 -->
-            <div class="gallery-item">
+            <!-- 4. 사무실청소 -->
+            <div class="gallery-item" data-category="office">
                 <div class="img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1613665813446-82a78c468a1d?q=80&w=800&auto=format&fit=crop" alt="화재 복구 솔루션">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop" alt="사무실청소">
                 </div>
                 <div class="gallery-content">
-                    <span class="badge">특수환경복원</span>
-                    <h3 class="gallery-title">제조 공장 내 화재 그을음 복구 작업</h3>
-                    <p class="gallery-desc">유해 탄화물질 중화 및 특수 탈취 시스템을 적용하여 가장 안전하고 신속하게 생산 라인을 재가동.</p>
+                    <span class="badge">사무실청소</span>
+                    <h3 class="gallery-title">스마트 오피스 야간 딥클리닝</h3>
+                    <p class="gallery-desc">임직원의 업무에 지장을 주지 않도록 심야 시간을 활용하여 바닥 왁스 코팅 및 카펫 얼룩을 복원했습니다.</p>
+                </div>
+            </div>
+
+            <!-- 5. 특수청소 -->
+            <div class="gallery-item" data-category="special">
+                <div class="img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop" alt="특수청소">
+                </div>
+                <div class="gallery-content">
+                    <span class="badge">특수청소</span>
+                    <h3 class="gallery-title">블로어 팬(Blower Fan) 비가동부 복원</h3>
+                    <p class="gallery-desc">드라이아이스 펠릿 분사를 통해 수분 없이 정밀 타격하여, 세척 전 심각했던 오염을 완벽하게 제거한 세척 후(After) 결과물입니다.</p>
+                </div>
+            </div>
+
+            <!-- 6. 후드청소 -->
+            <div class="gallery-item" data-category="hood">
+                <div class="img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=800&auto=format&fit=crop" alt="후드청소">
+                </div>
+                <div class="gallery-content">
+                    <span class="badge">후드청소</span>
+                    <h3 class="gallery-title">대형 구내식당 배기 후드 CIP 세척</h3>
+                    <p class="gallery-desc">화재의 주원인이 되는 후드 내부의 두꺼운 유증기 찌꺼기를 고온 스팀과 특수 약품으로 분해 완료했습니다.</p>
                 </div>
             </div>
 
         </div>
     </main>
 
+    <!-- 필터링 기능을 작동시키는 자바스크립트 -->
+    <script>
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 버튼 색상 활성화 변경
+                filterBtns.forEach(button => button.classList.remove('active'));
+                btn.classList.add('active');
+
+                // 데이터 필터 값 가져오기
+                const filterValue = btn.getAttribute('data-filter');
+
+                // 갤러리 이미지 필터링
+                galleryItems.forEach(item => {
+                    if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                        item.classList.remove('hide');
+                    } else {
+                        item.classList.add('hide');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
